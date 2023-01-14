@@ -8,7 +8,7 @@ This Dockerfile build from existing hadoop image but, if you want to download th
 https://archive.apache.org/dist/hadoop/common/hadoop-3.3.1/hadoop-3.3.1.tar.gz
 
 # Kick-off Cluster
-1. Clone this repos to your project directory, and `cd hadoop-in-docker`
+1. Clone this repos to your project directory, and `cd hadoop-docker`
 2. If you are in Linux/MAC Just simply run `./run_cluster.sh`
 3. If you are in Windows try run this command `docker build -t hadoop-base:3.2.1 . && docker-compose up`
 
