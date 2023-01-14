@@ -20,6 +20,9 @@ https://archive.apache.org/dist/hadoop/common/hadoop-3.3.1/hadoop-3.3.1.tar.gz
 4. Path `/opt/hadoop-3.3.1/share/hadoop/tools/lib/hadoop-streaming-3.3.1.jar` might be different for users or if you are using different version of Hadoop, run command `find / hadoop-streaming-$(HADOOP_VERSION).jar` to find it
 
 
+# Running with hadoop command
+
+```
 hadoop fs -mkdir -p input
 hdfs dfs -put ./input/* input
 
@@ -27,6 +30,7 @@ hadoop jar /opt/hadoop-3.3.1/share/hadoop/tools/lib/hadoop-streaming-3.3.1.jar \
 -file mapper.py    -mapper mapper.py \
 -file reducer.py   -reducer reducer.py \
 -input input -output output
+```
 
 credit to : https://github.com/wxw-matt/docker-hadoop
 That inspired me, and i make it less complicated to make it simple to learn
