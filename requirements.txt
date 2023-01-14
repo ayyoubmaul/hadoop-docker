@@ -1,0 +1,8 @@
+wheel
+setuptools
+pathlib
+mrjob==0.7.4
+pyYAML==5.4.1
+py4j
+numpy
+pandas
