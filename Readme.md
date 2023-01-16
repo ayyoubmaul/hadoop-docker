@@ -23,10 +23,7 @@ https://archive.apache.org/dist/hadoop/common/hadoop-3.3.1/hadoop-3.3.1.tar.gz
 2. Put your data in `input` directory in your local project `hdfs dfs -put ./input/* input`
 3. And ready to run
 ```
-hadoop jar /opt/hadoop-3.3.1/share/hadoop/tools/lib/hadoop-streaming-3.3.1.jar \
--file /path/to/mapper.py    -mapper /path/to/mapper.py \
--file /path/to/reducer.py   -reducer /path/to/reducer.py \
--input input -output output
+hadoop jar /opt/hadoop-3.3.1/share/hadoop/tools/lib/hadoop-streaming-3.3.1.jar -file /hadoop-data/map_reduce/word_count/mapper.py -mapper "python3 mapper.py" -file /hadoop-data/map_reduce/word_count/reducer.py -reducer "python3 reducer.py" -input input/words.txt -output output_word_count
 ```
 
 credit to : https://github.com/wxw-matt/docker-hadoop
