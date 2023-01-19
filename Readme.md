@@ -3,9 +3,10 @@ This is just for learning intention, not recomended for production. Use Hortonwo
 
 #### Have fun !
 
-# Download hadoop binary
-This Dockerfile build from existing hadoop image but, if you want to download the binary first instead build your own Dockerfile image :
+# Download binary
+- This Dockerfile build from existing hadoop image but, if you want to download the binary first instead build your own Dockerfile image :
 https://archive.apache.org/dist/hadoop/common/hadoop-3.3.1/hadoop-3.3.1.tar.gz
+- Download Apache Spark Binary https://downloads.apache.org/spark/spark-3.3.1/
 
 # Kick-off Cluster
 1. Clone this repos to your project directory, and `cd hadoop-docker`
