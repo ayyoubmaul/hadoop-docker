@@ -3,9 +3,10 @@ This is just for learning intention, not recomended for production. Use Hortonwo
 
 #### Have fun !
 
-# Download hadoop binary
-This Dockerfile build from existing hadoop image but, if you want to download the binary first instead build your own Dockerfile image :
+# Download binary
+- This Dockerfile build from existing hadoop image but, if you want to download the binary first instead build your own Dockerfile image :
 https://archive.apache.org/dist/hadoop/common/hadoop-3.3.1/hadoop-3.3.1.tar.gz
+- Download Apache Spark Binary https://downloads.apache.org/spark/spark-3.3.1/
 
 # Kick-off Cluster
 1. Clone this repos to your project directory, and `cd hadoop-docker`
@@ -23,10 +24,7 @@ https://archive.apache.org/dist/hadoop/common/hadoop-3.3.1/hadoop-3.3.1.tar.gz
 2. Put your data in `input` directory in your local project `hdfs dfs -put ./input/* input`
 3. And ready to run
 ```
-hadoop jar /opt/hadoop-3.3.1/share/hadoop/tools/lib/hadoop-streaming-3.3.1.jar \
--file /path/to/mapper.py    -mapper /path/to/mapper.py \
--file /path/to/reducer.py   -reducer /path/to/reducer.py \
--input input -output output
+hadoop jar /opt/hadoop-3.3.1/share/hadoop/tools/lib/hadoop-streaming-3.3.1.jar -file /hadoop-data/map_reduce/word_count/mapper.py -mapper "python3 mapper.py" -file /hadoop-data/map_reduce/word_count/reducer.py -reducer "python3 reducer.py" -input input/words.txt -output output_word_count
 ```
 
 credit to : https://github.com/wxw-matt/docker-hadoop
