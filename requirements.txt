@@ -6,3 +6,4 @@ pyYAML==5.4.1
 py4j
 numpy
 pandas
+pyspark

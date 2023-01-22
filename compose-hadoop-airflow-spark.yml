@@ -1,0 +1,197 @@
+version: "2.1"
+
+services:
+  postgres:
+    image: bigdata-postgres:0.2
+    container_name: postgres
+    hostname: postgres.bigdatacluster
+    mem_limit: ${POSTGRES_DB_MEM_LIM}
+    mem_reservation: ${POSTGRES_DB_MEM_RES}
+    volumes:
+      - postgres_pgdata:/var/lib/postgresql/data/pgdata
+    networks:
+      bigdatacluster:
+        aliases:
+           - postgres.bigdatacluster.com
+
+  redis:
+    image: bigdata-redis:0.2
+    container_name: redis
+    hostname: redis.bigdatacluster
+    mem_limit: ${REDIS_MEM_LIM}
+    mem_reservation: ${REDIS_MEM_RES}
+    volumes:
+      - redis_data:/data
+    networks:
+      bigdatacluster:
+        aliases:
+          - redis.bigdatacluster.com
+    command: redis-server
+
+  airflow-webui:
+    image: airflow-webui:0.1
+    container_name: airflow-webui
+    hostname: airflow-webui.bigdatacluster
+    mem_limit: ${AIRFLOW_WEB_MEM_LIM}
+    mem_reservation: ${AIRFLOW_WEB_MEM_RES}
+    volumes:
+      - ./airflow/dags:/usr/local/airflow/dags
+      - ./airflow/logs:/usr/local/airflow/logs
+      - ./airflow/plugins:/usr/local/airflow/plugins
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+        bigdatacluster:
+          aliases:
+            - airflowwebui.bigdatacluster.com
+    environment:
+      - CLUSTER_NAME=bigdatacluster
+    env_file:
+      - ./bigdata-cluster.env
+    user: "1000"
+    command: webserver
+
+  airflow-scheduler:
+    image: airflow-scheduler:0.2
+    container_name: airflow-scheduler
+    hostname: airflow-scheduler.bigdatacluster
+    mem_limit: ${AIRFLOW_SCH_MEM_LIM}
+    mem_reservation: ${AIRFLOW_SCH_MEM_RES}
+    volumes:
+      - ./airflow/dags:/usr/local/airflow/dags
+      - ./airflow/logs:/usr/local/airflow/logs
+      - ./airflow/plugins:/usr/local/airflow/plugins
+    depends_on:
+      airflow-webui:
+        condition: service_healthy
+    networks:
+        bigdatacluster:
+          aliases:
+            - airflowscheduler.bigdatacluster.com
+    environment:
+      - CLUSTER_NAME=bigdatacluster
+    env_file:
+      - ./bigdata-cluster.env
+    user: "1000"
+    command: scheduler
+
+  airflow-worker1:
+    image: airflow-worker:0.2
+    container_name: airflow-worker1
+    hostname: airflow-worker1.bigdatacluster
+    mem_limit: ${AIRFLOW_WRK_MEM_LIM}
+    mem_reservation: ${AIRFLOW_WRK_MEM_RES}
+    volumes:
+      - ./airflow/dags:/usr/local/airflow/dags
+      - ./airflow/logs:/usr/local/airflow/logs
+      - ./airflow/plugins:/usr/local/airflow/plugins
+    depends_on:
+      airflow-scheduler:
+        condition: service_healthy
+    networks:
+        bigdatacluster:
+          aliases:
+            - airflowworker1.bigdatacluster.com
+    environment:
+      - CLUSTER_NAME=bigdatacluster
+    env_file:
+      - ./bigdata-cluster.env
+    user: "1000"
+    command: worker
+
+  namenode:
+    build: ./namenode
+    container_name: namenode
+    volumes:
+      - hadoop_namenode:/hadoop/dfs/name
+      - ./data/:/hadoop-data/input
+      - ./map_reduce/:/hadoop-data/map_reduce
+      - ./requirements.txt:/hadoop-data/requirements.txt
+    environment:
+      - CLUSTER_NAME=test
+    env_file:
+      - ./hadoop.env
+    ports:
+      - "9870:9870"
+
+  resourcemanager:
+    build: ./resourcemanager
+    container_name: resourcemanager
+    restart: on-failure
+    depends_on:
+      - namenode
+      - datanode1
+      - datanode2
+      - datanode3
+    env_file:
+      - ./hadoop.env
+    ports:
+      - "8089:8088"
+
+  historyserver:
+    build: ./historyserver
+    container_name: historyserver
+    depends_on:
+      - namenode
+      - datanode1
+      - datanode2
+    volumes:
+      - hadoop_historyserver:/hadoop/yarn/timeline
+    env_file:
+      - ./hadoop.env
+    ports:
+      - "8188:8188"
+
+  nodemanager1:
+    build: ./nodemanager
+    container_name: nodemanager1
+    depends_on:
+      - namenode
+      - datanode1
+      - datanode2
+    env_file:
+      - ./hadoop.env
+    ports:
+      - "8042:8042"
+
+  datanode1:
+    build: ./datanode
+    container_name: datanode1
+    depends_on:
+      - namenode
+    volumes:
+      - hadoop_datanode1:/hadoop/dfs/data
+    env_file:
+      - ./hadoop.env
+
+  datanode2:
+    build: ./datanode
+    container_name: datanode2
+    depends_on:
+      - namenode
+    volumes:
+      - hadoop_datanode2:/hadoop/dfs/data
+    env_file:
+      - ./hadoop.env
+
+  datanode3:
+    build: ./datanode
+    container_name: datanode3
+    depends_on:
+      - namenode
+    volumes:
+      - hadoop_datanode3:/hadoop/dfs/data
+    env_file:
+      - ./hadoop.env
+
+volumes:
+  hadoop_namenode:
+  hadoop_datanode1:
+  hadoop_datanode2:
+  hadoop_datanode3:
+  hadoop_historyserver:
+  postgres_pgdata:
+  redis_data:
