@@ -1,26 +1,4 @@
 version: "2.1"
-x-airflow-common:
-  &airflow-common
-  image: ${AIRFLOW_IMAGE_NAME:-hadoop-base:3.3.1}
-  environment:
-    - AIRFLOW_HOME=/home/airflow
-    - AIRFLOW__CORE_dags_folder=/home/airflow/dags
-    - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-    - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
-    # For backward compatibility, with Airflow <2.3
-    - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
-    - AIRFLOW__CORE__FERNET_KEY=FB0o_zt4e3Ziq3LdUUO7F2Z95cvFFx16hU8jTeR1ASM=
-    - AIRFLOW__CORE__LOAD_EXAMPLES=False
-    - AIRFLOW__CORE__LOGGING_LEVEL=INFO
-  volumes:
-    - ./output:/home/airflow/output
-    - ./dags:/home/airflow/dags
-    - ./plugins:/home/airflow/plugins
-    - ./logs:/home/airflow/logs
-    - ./data/:/hadoop-data/input
-    - ./map_reduce/:/hadoop-data/map_reduce
-  depends_on:
-    - postgres
 
 services:
   namenode:
@@ -107,46 +85,6 @@ services:
       - hadoop_datanode3:/hadoop/dfs/data
     env_file:
       - ./hadoop.env
-
-  postgres:
-    image: postgres:13
-    environment:
-      - POSTGRES_USER=airflow
-      - POSTGRES_PASSWORD=airflow
-      - POSTGRES_DB=airflow
-      - POSTGRES_PORT=5432
-    ports:
-      - "5432:5432"
-
-  airflow-init:
-    << : *airflow-common
-    container_name: airflow_init
-    entrypoint: /bin/bash
-    command:
-      - -c
-      - airflow users list || ( airflow db init && airflow db upgrade &&
-        airflow users create
-          --role Admin
-          --username airflow
-          --password airflow
-          --email airflow@airflow.com
-          --firstname airflow
-          --lastname airflow )
-    restart: on-failure
-
-  airflow-webserver:
-    << : *airflow-common
-    command: airflow webserver
-    ports:
-      - 8080:8080
-    container_name: airflow_webserver
-    restart: always
-
-  airflow-scheduler:
-    << : *airflow-common
-    command: airflow scheduler
-    container_name: airflow_scheduler
-    restart: always
 
 volumes:
   hadoop_namenode:

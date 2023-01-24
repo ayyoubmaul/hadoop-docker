@@ -1,0 +1,163 @@
+FROM  apache/airflow:2.3.2
+
+USER root
+
+# --------------------------------------------------------
+# JAVA
+# --------------------------------------------------------
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    openjdk-11-jdk
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64/
+
+# --------------------------------------------------------
+# HADOOP
+# --------------------------------------------------------
+ENV HADOOP_VERSION=3.3.1
+ENV HADOOP_URL=https://downloads.apache.org/hadoop/common/hadoop-$HADOOP_VERSION/hadoop-$HADOOP_VERSION.tar.gz
+ENV HADOOP_PREFIX=/opt/hadoop-$HADOOP_VERSION
+ENV HADOOP_CONF_DIR=/etc/hadoop
+ENV MULTIHOMED_NETWORK=1
+ENV USER=root
+ENV PATH $HADOOP_PREFIX/bin/:$PATH
+
+RUN set -x \
+    && curl -fSL "$HADOOP_URL" -o /tmp/hadoop.tar.gz \
+    && tar -xvf /tmp/hadoop.tar.gz -C /opt/ \
+    && rm /tmp/hadoop.tar.gz*
+
+RUN ln -s /opt/hadoop-$HADOOP_VERSION/etc/hadoop /etc/hadoop
+RUN mkdir /opt/hadoop-$HADOOP_VERSION/logs
+RUN mkdir /hadoop-data
+
+USER root
+
+ADD entrypoint.sh /entrypoint.sh
+RUN chmod a+x /entrypoint.sh
+
+# ADD hadoop.env /hadoop.env
+
+RUN set -x && cd / && ./entrypoint.sh
+
+# --------------------------------------------------------
+# HIVE
+# --------------------------------------------------------
+
+# ENV HIVE_VERSION=3.1.2
+# ENV POSTGRES_JAR_VERSION=42.2.20
+# ENV HIVE_HOME=/opt/hive
+# ENV PATH=$HIVE_HOME/bin:$PATH
+# ENV HADOOP_HOME=/opt/hadoop-$HADOOP_VERSION
+
+# WORKDIR /opt
+
+# RUN apt-get update && apt-get install -y wget procps && \
+# 	wget http://www-us.apache.org/dist/hive/hive-$HIVE_VERSION/apache-hive-$HIVE_VERSION-bin.tar.gz && \
+# 	tar -xzvf apache-hive-$HIVE_VERSION-bin.tar.gz && \
+# 	mv apache-hive-$HIVE_VERSION-bin hive && \
+# 	wget https://jdbc.postgresql.org/download/postgresql-$POSTGRES_JAR_VERSION.jar -O $HIVE_HOME/lib/postgresql-jdbc.jar && \
+# 	rm apache-hive-$HIVE_VERSION-bin.tar.gz && \
+# 	apt-get --purge remove -y wget && \
+# 	apt-get clean && \
+# 	rm -rf /var/lib/apt/lists/*
+
+# ADD conf/hive-site.xml $HIVE_HOME/conf
+# ADD conf/beeline-log4j2.properties $HIVE_HOME/conf
+# ADD conf/hive-exec-log4j2.properties $HIVE_HOME/conf
+# ADD conf/hive-log4j2.properties $HIVE_HOME/conf
+# ADD conf/llap-daemon-log4j2.properties $HIVE_HOME/conf
+# ADD conf/ivysettings.xml $HIVE_HOME/conf
+# ADD conf/hive-env.sh $HIVE_HOME/conf
+
+# # Work around for guava dependency [HIVE-22915 issues]
+# RUN rm /opt/hive/lib/guava-19.0.jar
+# RUN cp /opt/hadoop-$HADOOP_VERSION/share/hadoop/hdfs/lib/guava-27.0-jre.jar /opt/hive/lib/
+
+# --------------------------------------------------------
+# SQOOP
+# --------------------------------------------------------
+
+# ENV SQOOP_VERSION=1.4.7
+# ENV SQOOP_HOME=/opt/sqoop-${SQOOP_VERSION}.bin__hadoop-2.6.0
+# ENV PATH=$PATH:${SQOOP_HOME}/bin
+
+# RUN curl -fSL https://downloads.apache.org/sqoop/${SQOOP_VERSION}/sqoop-${SQOOP_VERSION}.bin__hadoop-2.6.0.tar.gz -o /tmp/sqoop.tar.gz \
+#     && tar -xvf /tmp/sqoop.tar.gz -C /opt/ \
+#     && rm /tmp/sqoop.tar.gz
+
+# ADD conf/sqoop-env.sh ${SQOOP_HOME}/conf
+# RUN cp $HIVE_HOME/lib/postgresql-jdbc.jar ${SQOOP_HOME}/lib/postgresql-jdbc.jar
+
+# --------------------------------------------------------
+# SPARK
+# --------------------------------------------------------
+
+ENV SPARK_VERSION spark-3.3.1-bin-hadoop3
+ENV SPARK_URL https://downloads.apache.org/spark/spark-3.3.1/spark-3.3.1-bin-hadoop3.tgz
+ENV SPARK_HOME=/opt/$SPARK_VERSION
+ENV PATH $SPARK_HOME/bin:$PATH
+ENV HADOOP_CONF_DIR=$SPARK_HOME/conf
+ENV PYSPARK_PYTHON=python3
+ENV PYTHONHASHSEED=1
+
+RUN set -x \
+    && curl -fSL "${SPARK_URL}" -o /tmp/spark.tar.gz \
+    && tar -xvzf /tmp/spark.tar.gz -C /opt/ \
+    && rm /tmp/spark.tar.gz*
+
+ADD conf/hive-site.xml $SPARK_HOME/conf
+ADD conf/core-site.xml $SPARK_HOME/conf
+ADD conf/yarn-site.xml $SPARK_HOME/conf
+
+# --------------------------------------------------------
+# Airflow
+# --------------------------------------------------------
+
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+         gcc \
+         g++ \
+         subversion \
+         python3-dev \
+         gfortran \
+         build-essential \
+         libopenblas-dev \
+         liblapack-dev \
+         libqpdf-dev \
+         pkg-config \
+         libzbar-dev \
+         libpython3.9-dev \
+         qpdf \
+         xvfb \
+         gconf-service \
+         libasound2 \
+         libatk1.0-0 \
+         libcairo2 \
+         libcups2 \
+         libfontconfig1 \
+         libgdk-pixbuf2.0-0 \
+         libgtk-3-0 \
+         libnspr4 \
+         libpango-1.0-0 \
+         libxss1 \
+         fonts-liberation \
+         libappindicator1 \
+         libnss3 \
+         lsb-release \
+         xdg-utils \
+         wget \
+  && apt-get autoremove -yqq --purge \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
+
+USER airflow
+RUN pip install --default-timeout=100 --upgrade pip
+RUN pip install pikepdf==2.16.1 Cython numpy wheel setuptools --force-reinstall
+
+ADD requirements.txt /requirements.txt
+
+# run install
+RUN pip3 install -r /requirements.txt
+
+# --------------------------------------------------------
+# ENVIRONMENT FIELD CONFIGURATION
+# --------------------------------------------------------

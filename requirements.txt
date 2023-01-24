@@ -7,3 +7,4 @@ py4j
 numpy
 pandas
 pyspark
+apache-airflow-providers-apache-spark
