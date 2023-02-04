@@ -21,6 +21,8 @@ x-airflow-common:
     - ./map_reduce/:/hadoop-data/map_reduce
   depends_on:
     - postgres
+  networks:
+    - hadoop_network
 
 services:
   namenode:
@@ -37,6 +39,8 @@ services:
       - ./hadoop.env
     ports:
       - "9870:9870"
+    networks:
+      - hadoop_network
 
   resourcemanager:
     build: ./resourcemanager
@@ -51,6 +55,8 @@ services:
       - ./hadoop.env
     ports:
       - "8089:8088"
+    networks:
+      - hadoop_network
 
   historyserver:
     build: ./historyserver
@@ -65,6 +71,8 @@ services:
       - ./hadoop.env
     ports:
       - "8188:8188"
+    networks:
+      - hadoop_network
 
   nodemanager1:
     build: ./nodemanager
@@ -77,6 +85,8 @@ services:
       - ./hadoop.env
     ports:
       - "8042:8042"
+    networks:
+      - hadoop_network
 
   datanode1:
     build: ./datanode
@@ -87,6 +97,8 @@ services:
       - hadoop_datanode1:/hadoop/dfs/data
     env_file:
       - ./hadoop.env
+    networks:
+      - hadoop_network
 
   datanode2:
     build: ./datanode
@@ -97,6 +109,8 @@ services:
       - hadoop_datanode2:/hadoop/dfs/data
     env_file:
       - ./hadoop.env
+    networks:
+      - hadoop_network
 
   datanode3:
     build: ./datanode
@@ -107,6 +121,8 @@ services:
       - hadoop_datanode3:/hadoop/dfs/data
     env_file:
       - ./hadoop.env
+    networks:
+      - hadoop_network
 
   postgres:
     image: postgres:13
@@ -117,6 +133,8 @@ services:
       - POSTGRES_PORT=5432
     ports:
       - "5432:5432"
+    networks:
+      - hadoop_network
 
   airflow-init:
     << : *airflow-common
@@ -154,3 +172,7 @@ volumes:
   hadoop_datanode2:
   hadoop_datanode3:
   hadoop_historyserver:
+
+networks:
+  hadoop_network:
+    name: hadoop_network
