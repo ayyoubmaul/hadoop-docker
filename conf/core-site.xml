@@ -20,11 +20,13 @@
 <property>
 	<name>fs.defaultFS</name>
 	<value>hdfs://namenode:9000</value>
+        <description>Where HDFS NameNode can be found on the network</description>
 </property>
 
 <property>
         <name>hadoop.http.staticuser.user</name>
         <value>root</value>
+        <description>Whose can view the logs in the container application</description>
 </property>
 
 <property>

@@ -20,6 +20,9 @@
 <property>
 	<name>mapreduce.framework.name</name>
 	<value>yarn</value>
+        <description>
+                How hadoop execute the job, use yarn to execute the job
+        </description>
 </property>
 
 <property>
@@ -50,6 +53,9 @@
 <property>
         <name>yarn.app.mapreduce.am.env</name>
         <value>HADOOP_MAPRED_HOME=/opt/hadoop-3.2.1/</value>
+        <description>
+                Environment variable where MapReduce job will be processed
+        </description>
 </property>
 
 <property>

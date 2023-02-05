@@ -20,11 +20,18 @@
 <property>
 	<name>yarn.log-aggregation-enable</name>
 	<value>true</value>
+        <description>
+                Log aggregation collects each container's logs and
+                moves these logs onto a file-system
+        </description>
 </property>
 
 <property>
         <name>yarn.log.server.url</name>
         <value>http://historyserver:8188/applicationhistory/logs/</value>
+        <description>
+                URL for log aggregation server
+        </description>
 </property>
 
 <property>
