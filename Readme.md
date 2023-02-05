@@ -39,4 +39,4 @@ That inspired me, and i make it less complicated to make it simple to learn
 5. To calculate YARN and MapReduce meory configuration [here](https://docs.cloudera.com/HDPDocuments/HDP2/HDP-2.0.9.0/bk_installing_manually_book/content/rpm-chap1-11.html)
 
 # Note
-Please start everything from `run_cluste.sh` because the base image created from this step
+Please start everything from `run_cluster.sh` because the base image created from this step
