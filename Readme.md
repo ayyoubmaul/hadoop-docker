@@ -1,3 +1,5 @@
+![Architecture](src/hadoop-spark-airflow-architecture.png)
+
 # Learn Hadoop Using Docker
 This is just for learning intention, not recomended for production. Use Hortonworks or Cloudera for production instead or you can just setup using cloud service. In GCP there is Dataproc or in AWS there is EMR (Elastic Map Reduce).
 
