@@ -35,7 +35,7 @@ class SalesAverage(MRJob):
 
     def reducer_sort_average(self, _, values):
         for average, key in sorted(values, key=lambda x: (float(x[0]), x[1])):
-            with open('/Users/ayyoub-maulana/gitRepo/hadoop-in-docker/data/output_sales_mapred.csv', 'a') as f:
+            with open('output_sales_mapred.csv', 'a') as f:
                 f.write(f'{key}, {average}\n')
 
             yield key, average
