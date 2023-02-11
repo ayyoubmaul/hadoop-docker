@@ -17,79 +17,88 @@
 <!-- Put site-specific property overrides in this file. -->
 
 <configuration>
-<property>
-        <name>dfs.replication</name>
-        <value>2</value>
-        <description>The default replication factor of files on HDFS</description>
-</property>
+        <property>
+                <name>dfs.webhdfs.enabled</name>
+                <value>true</value>
+        </property>
 
-<property>
-	<name>dfs.webhdfs.enabled</name>
-	<value>true</value>
-</property>
+        <property>
+                <name>dfs.permissions.enabled</name>
+                <value>false</value>
+        </property>
 
-<property>
-        <name>dfs.permissions.enabled</name>
-        <value>false</value>
-</property>
+        <property>
+                <name>dfs.permissions</name>
+                <value>false</value>
+        </property>
 
-<property>
-        <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
-        <value>false</value>
-</property>
+        <property>
+                <name>dfs.namenode.name.dir</name>
+                <value>/hadoop/dfs/name</value>
+        </property>
 
-<!-- Allow multihomed network for security, availability and performance-->
-<property>
-        <name>dfs.namenode.rpc-bind-host</name>
-        <value>0.0.0.0</value>
-        <description>
-                controls what IP address the NameNode binds to.
-                0.0.0.0 means all available.
-	</description>
-</property>
+        <property>
+                <name>dfs.datanode.data.dir</name>
+                <value>/hadoop/dfs/data</value>
+        </property>
 
-<property>
-        <name>dfs.namenode.servicerpc-bind-host</name>
-        <value>0.0.0.0</value>
-        <description>
-                controls what IP address the NameNode binds to.
-                0.0.0.0 means all available.
-        </description>
-</property>
+        <property>
+                <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
+                <value>false</value>
+        </property>
 
-<property>
-        <name>dfs.namenode.http-bind-host</name>
-        <value>0.0.0.0</value>
-        <description>
-                controls what IP address the NameNode binds to.
-                0.0.0.0 means all available.
-        </description>
-</property>
+        <!-- Allow multihomed network for security, availability and performance-->
+        <property>
+                <name>dfs.namenode.rpc-bind-host</name>
+                <value>0.0.0.0</value>
+                <description>
+                        controls what IP address the NameNode binds to.
+                        0.0.0.0 means all available.
+                </description>
+        </property>
 
-<property>
-        <name>dfs.namenode.https-bind-host</name>
-        <value>0.0.0.0</value>
-        <description>
-                controls what IP address the NameNode binds to.
-                0.0.0.0 means all available.
-        </description>
-</property>
+        <property>
+                <name>dfs.namenode.servicerpc-bind-host</name>
+                <value>0.0.0.0</value>
+                <description>
+                        controls what IP address the NameNode binds to.
+                        0.0.0.0 means all available.
+                </description>
+        </property>
 
-<property>
-        <name>dfs.client.use.datanode.hostname</name>
-        <value>true</value>
-        <description>
-                Whether clients should use datanode hostnames when
-                connecting to datanodes.
-        </description>
-</property>
+        <property>
+                <name>dfs.namenode.http-bind-host</name>
+                <value>0.0.0.0</value>
+                <description>
+                        controls what IP address the NameNode binds to.
+                        0.0.0.0 means all available.
+                </description>
+        </property>
 
-<property>
-        <name>dfs.datanode.use.datanode.hostname</name>
-        <value>true</value>
-        <description>
-                Whether datanodes should use datanode hostnames when
-                connecting to other datanodes for data transfer.
-        </description>
-</property>
+        <property>
+                <name>dfs.namenode.https-bind-host</name>
+                <value>0.0.0.0</value>
+                <description>
+                        controls what IP address the NameNode binds to.
+                        0.0.0.0 means all available.
+                </description>
+        </property>
+
+        <property>
+                <name>dfs.client.use.datanode.hostname</name>
+                <value>true</value>
+                <description>
+                        Whether clients should use datanode hostnames when
+                        connecting to datanodes.
+                </description>
+        </property>
+
+        <property>
+                <name>dfs.datanode.use.datanode.hostname</name>
+                <value>true</value>
+                <description>
+                        Whether datanodes should use datanode hostnames when
+                        connecting to other datanodes for data transfer.
+                </description>
+        </property>
 </configuration>

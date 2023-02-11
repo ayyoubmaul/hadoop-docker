@@ -31,7 +31,7 @@ if __name__ == "__main__":
     movieNames = loadMovieNames()
 
     # Load up the raw u.data file
-    lines = sc.textFile("hdfs://namenode:9000/user/root/input/u.data")
+    lines = sc.textFile("hdfs://namenode:8020/user/root/input/u.data")
 
     # Convert to (movieID, (rating, 1.0))
     movieRatings = lines.map(parseInput)

@@ -15,6 +15,7 @@ services:
       - ./hadoop.env
     ports:
       - "9870:9870"
+      - "8020:8020"
     networks:
       - hadoop_network
 

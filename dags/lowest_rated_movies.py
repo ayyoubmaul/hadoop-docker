@@ -5,9 +5,6 @@ from airflow.contrib.operators.spark_submit_operator import SparkSubmitOperator
 from datetime import datetime, timedelta
 
 
-cmd = "ssh root@172.21.0.3 spark-submit \
-   /hadoop-data/map_reduce/lowest-rated-movies-spark.py"
-
 default_args = {
     'owner' : 'ayyoub',
     'depend_on_past' : False,

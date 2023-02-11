@@ -36,9 +36,14 @@ USER root
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod a+x /entrypoint.sh
 
+COPY conf/core-site.xml $HADOOP_CONF_DIR/core-site.xml
+COPY conf/hdfs-site.xml $HADOOP_CONF_DIR/hdfs-site.xml
+COPY conf/mapred-site.xml $HADOOP_CONF_DIR/mapred-site.xml
+COPY conf/yarn-site.xml $HADOOP_CONF_DIR/yarn-site.xml
+
 # ADD hadoop.env /hadoop.env
 
-RUN set -x && cd / && ./entrypoint.sh
+# RUN set -x && cd / && ./entrypoint.sh
 
 # --------------------------------------------------------
 # SPARK
@@ -48,7 +53,7 @@ ENV SPARK_VERSION spark-3.3.1-bin-hadoop3
 ENV SPARK_URL https://downloads.apache.org/spark/spark-3.3.1/spark-3.3.1-bin-hadoop3.tgz
 ENV SPARK_HOME=/opt/$SPARK_VERSION
 ENV PATH $SPARK_HOME/bin:$PATH
-ENV HADOOP_CONF_DIR=$SPARK_HOME/conf
+# ENV HADOOP_CONF_DIR=$SPARK_HOME/conf
 ENV PYSPARK_PYTHON=python3
 ENV PYTHONHASHSEED=1
 

@@ -36,5 +36,5 @@ hadoop jar /opt/hadoop-3.3.1/share/hadoop/tools/lib/hadoop-streaming-3.3.1.jar -
 4. yarn-site.xml default and description [here](https://hadoop.apache.org/docs/r3.3.1/hadoop-yarn/hadoop-yarn-common/yarn-default.xml)
 5. To calculate YARN and MapReduce memory configuration [here](https://docs.cloudera.com/HDPDocuments/HDP2/HDP-2.0.9.0/bk_installing_manually_book/content/rpm-chap1-11.html)
 
-# Note
+# End to end step by step to kick-off Airflow, Spark Cluster and Hadoop Cluster
 Please start everything from `run_cluster.sh` because the base image created from this step
