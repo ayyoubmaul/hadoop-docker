@@ -14,7 +14,7 @@ default_args = {
     'retry_delay' : timedelta(minutes=5)
 }
 
-with DAG('lowest_rated_movies', default_args=default_args, schedule_interval=None, catchup=False) as dag:
+with DAG('avg_product_price', default_args=default_args, schedule_interval=None, catchup=False) as dag:
 
     start = DummyOperator(
         task_id='start',
@@ -23,7 +23,7 @@ with DAG('lowest_rated_movies', default_args=default_args, schedule_interval=Non
     spark_submit = SparkSubmitOperator(
         task_id='spark_submit',
         conn_id='spark-hadoop',
-        application="/hadoop-data/map_reduce/spark/lowest_rated_movies_spark.py"
+        application="/hadoop-data/map_reduce/spark/average_price.py"
     )
 
     end = DummyOperator(
