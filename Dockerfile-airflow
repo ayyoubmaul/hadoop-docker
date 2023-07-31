@@ -29,14 +29,14 @@ RUN ln -s /opt/hadoop-$HADOOP_VERSION/etc/hadoop /etc/hadoop
 RUN mkdir /opt/hadoop-$HADOOP_VERSION/logs
 RUN mkdir /hadoop-data
 
-USER root
+# USER root
 
-ADD entrypoint.sh /entrypoint.sh
-RUN chmod a+x /entrypoint.sh
+# ADD entrypoint.sh /entrypoint.sh
+# RUN chmod a+x /entrypoint.sh
 
-# ADD hadoop.env /hadoop.env
+# # ADD hadoop.env /hadoop.env
 
-RUN set -x && cd / && ./entrypoint.sh
+# RUN set -x && cd / && ./entrypoint.sh
 
 # --------------------------------------------------------
 # HIVE
@@ -95,7 +95,7 @@ ENV SPARK_VERSION spark-3.3.1-bin-hadoop3
 ENV SPARK_URL https://downloads.apache.org/spark/spark-3.3.1/spark-3.3.1-bin-hadoop3.tgz
 ENV SPARK_HOME=/opt/$SPARK_VERSION
 ENV PATH $SPARK_HOME/bin:$PATH
-ENV HADOOP_CONF_DIR=$SPARK_HOME/conf
+# ENV HADOOP_CONF_DIR=$SPARK_HOME/conf
 ENV PYSPARK_PYTHON=python3
 ENV PYTHONHASHSEED=1
 
