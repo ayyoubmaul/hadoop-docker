@@ -1,14 +1,23 @@
-FROM python:3.7
+FROM openjdk:11-jdk AS jdk
+
+FROM python:3.11
 
 USER root
 
 # --------------------------------------------------------
 # JAVA
 # --------------------------------------------------------
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    openjdk-11-jdk
+RUN apt update
+RUN apt-get install -y --no-install-recommends \
+    python3-launchpadlib \
+    software-properties-common
+# RUN add-apt-repository ppa:openjdk-r/ppa
+# RUN apt update
+# RUN apt install -y --no-install-recommends \
+#     openjdk-8-jdk
 # For AMD based architecture use
 # ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
+COPY --from=jdk /usr/local/openjdk-11 /usr/lib/jvm/java-11-openjdk-arm64/
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-arm64/
 
 # --------------------------------------------------------
@@ -51,8 +60,8 @@ COPY conf/yarn-site.xml $HADOOP_CONF_DIR/yarn-site.xml
 # SPARK
 # --------------------------------------------------------
 
-ENV SPARK_VERSION spark-3.3.1-bin-hadoop3
-ENV SPARK_URL https://downloads.apache.org/spark/spark-3.3.1/spark-3.3.1-bin-hadoop3.tgz
+ENV SPARK_VERSION spark-3.3.2
+ENV SPARK_URL https://downloads.apache.org/spark/${SPARK_VERSION}/${SPARK_VERSION}-bin-hadoop3.tgz
 ENV SPARK_HOME=/opt/$SPARK_VERSION
 ENV PATH $SPARK_HOME/bin:$PATH
 # ENV HADOOP_CONF_DIR=$SPARK_HOME/conf
@@ -70,7 +79,7 @@ ADD conf/yarn-site.xml $SPARK_HOME/conf
 #=========
 # INSTALL PYTHON DEPS
 #=========
-RUN apt-get update \
+RUN apt-get update && add-apt-repository ppa:deadsnakes/ppa \
   && apt-get install -y --no-install-recommends \
          gcc \
          g++ \
@@ -83,7 +92,8 @@ RUN apt-get update \
          libqpdf-dev \
          pkg-config \
          libzbar-dev \
-         libpython3.9-dev \
+         python3-dev \
+         libpython3-dev \
          qpdf \
          xvfb \
          gconf-service \
@@ -108,7 +118,7 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --default-timeout=100 --upgrade pip
-RUN pip install pikepdf==2.16.1 Cython numpy wheel setuptools --force-reinstall
+RUN pip install pikepdf Cython numpy wheel setuptools --force-reinstall
 
 ADD requirements.txt /requirements.txt
 

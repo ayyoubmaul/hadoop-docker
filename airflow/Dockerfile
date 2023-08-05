@@ -34,6 +34,7 @@ RUN set -ex \
         libpq-dev \
         git \
     ' \
+    && add-apt-repository --remove ppa:deadsnakes/ppa \
     && apt-get update -yqq \
     && apt-get upgrade -yqq \
     && apt-get install -yqq --no-install-recommends \
@@ -44,7 +45,7 @@ RUN set -ex \
         apt-utils \
         curl \
         rsync \
-        netcat \
+        netcat-traditional \
         locales \
         gcc \
         libpq5 \
