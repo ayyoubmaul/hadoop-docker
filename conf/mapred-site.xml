@@ -52,7 +52,7 @@
 
         <property>
                 <name>yarn.app.mapreduce.am.env</name>
-                <value>HADOOP_MAPRED_HOME=/opt/hadoop-3.3.1/</value>
+                <value>HADOOP_MAPRED_HOME=/opt/hadoop-3.3.6/</value>
                 <description>
                         Environment variable where MapReduce job will be processed
                 </description>
@@ -60,12 +60,12 @@
 
         <property>
                 <name>mapreduce.map.env</name>
-                <value>HADOOP_MAPRED_HOME=/opt/hadoop-3.3.1/</value>
+                <value>HADOOP_MAPRED_HOME=/opt/hadoop-3.3.6/</value>
         </property>
 
         <property>
                 <name>mapreduce.reduce.env</name>
-                <value>HADOOP_MAPRED_HOME=/opt/hadoop-3.3.1/</value>
+                <value>HADOOP_MAPRED_HOME=/opt/hadoop-3.3.6/</value>
         </property>
 
         <!-- Allow multihomed network for security, availability and performance-->

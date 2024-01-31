@@ -1,4 +1,4 @@
-FROM hadoop-base:3.3.1
+FROM hadoop-base:3.3.6
 
 # Never prompt the user for choices on installation/configuration of packages
 ENV DEBIAN_FRONTEND noninteractive

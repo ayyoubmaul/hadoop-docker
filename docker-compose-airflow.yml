@@ -1,7 +1,6 @@
 version: "2.1"
-x-airflow-common:
-  &airflow-common
-  image: ${AIRFLOW_IMAGE_NAME:-airflow-hadoop-base:3.3.1}
+x-airflow-common: &airflow-common
+  image: ${AIRFLOW_IMAGE_NAME:-airflow-hadoop-base:3.3.6}
   environment:
     - AIRFLOW_HOME=/home/airflow
     - AIRFLOW__CORE_dags_folder=/home/airflow/dags
