@@ -44,3 +44,14 @@ hadoop jar /opt/hadoop-3.3.6/share/hadoop/tools/lib/hadoop-streaming-3.3.6.jar -
 ## End to end step by step to kick-off Airflow, Spark Cluster and Hadoop Cluster
 
 Please start everything from `run_cluster.sh` because the base image created from this step
+
+## To Do
+
+- Add Hive configuration files
+  - `hive-site.xml`
+  - `beeline-log4j2.properties`
+  - `hive-exec-log4j2.properties`
+  - `hive-log4j2.properties`
+  - `llap-daemon-log4j2.properties`
+  - `ivysettings.xml`
+  - `hive-env.sh`
