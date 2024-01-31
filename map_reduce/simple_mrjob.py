@@ -1,11 +1,11 @@
-from mrjob.job import MRJob
 import re
 
+from mrjob.job import MRJob
 
 WORD_RE = re.compile(r"[\w']+")
 
-class FreqCounts(MRJob):
 
+class FreqCounts(MRJob):
     def mapper(self, _, line):
         for word in WORD_RE.findall(line):
             yield (word.lower(), 1)
@@ -14,5 +14,5 @@ class FreqCounts(MRJob):
         yield (word, sum(counts))
 
 
-if __name__ == '__main__':
-     FreqCounts.run()
+if __name__ == "__main__":
+    FreqCounts.run()

@@ -136,23 +136,16 @@ services:
       - hadoop_network
 
   airflow-init:
-    << : *airflow-common
+    <<: *airflow-common
     container_name: airflow_init
     entrypoint: /bin/bash
     command:
       - -c
-      - airflow users list || ( airflow db init && airflow db upgrade &&
-        airflow users create
-          --role Admin
-          --username airflow
-          --password airflow
-          --email airflow@airflow.com
-          --firstname airflow
-          --lastname airflow )
+      - airflow users list || ( airflow db init && airflow db upgrade && airflow users create --role Admin --username airflow --password airflow --email airflow@airflow.com --firstname airflow --lastname airflow )
     restart: on-failure
 
   airflow-webserver:
-    << : *airflow-common
+    <<: *airflow-common
     command: airflow webserver
     ports:
       - 8080:8080
@@ -160,7 +153,7 @@ services:
     restart: always
 
   airflow-scheduler:
-    << : *airflow-common
+    <<: *airflow-common
     command: airflow scheduler
     container_name: airflow_scheduler
     restart: always
@@ -171,6 +164,7 @@ volumes:
   hadoop_datanode2:
   hadoop_datanode3:
   hadoop_historyserver:
+
 
 networks:
   hadoop_network:

@@ -1,18 +1,19 @@
-from pyspark.sql import SparkSession
-from pyspark.sql import Row
-from pyspark.sql import functions
+from pyspark.sql import Row, SparkSession
+
 
 def loadMovieNames():
     movieNames = {}
     with open("ml-100k/u.item") as f:
         for line in f:
-            fields = line.split('|')
+            fields = line.split("|")
             movieNames[int(fields[0])] = fields[1]
     return movieNames
 
+
 def parseInput(line):
     fields = line.split()
-    return Row(movieID = int(fields[1]), rating = float(fields[2]))
+    return Row(movieID=int(fields[1]), rating=float(fields[2]))
+
 
 if __name__ == "__main__":
     # Create a SparkSession (the config bit is only for Windows!)
@@ -42,7 +43,7 @@ if __name__ == "__main__":
 
     # Print them out, converting movie ID's to names as we go.
     for movie in topTen:
-        print (movieNames[movie[0]], movie[1], movie[2])
+        print(movieNames[movie[0]], movie[1], movie[2])
 
     # Stop the session
     spark.stop()

@@ -3,22 +3,16 @@ from mrjob.step import MRStep
 
 
 class SalesAverage(MRJob):
-
     def steps(self):
         return [
-            MRStep(
-                mapper=self.mapper_by_product,
-                reducer=self.reducer_average_price
-            ),
-            MRStep(
-                reducer=self.reducer_sort_average
-            )
+            MRStep(mapper=self.mapper_by_product, reducer=self.reducer_average_price),
+            MRStep(reducer=self.reducer_sort_average),
         ]
 
     def mapper_by_product(self, _, line):
-        data = line.split(',')
+        data = line.split(",")
 
-        if data[3] != 'Price Each' and data[3] != '':
+        if data[3] != "Price Each" and data[3] != "":
             product = data[1]
             price = float(data[3])
             yield product, price
@@ -31,14 +25,15 @@ class SalesAverage(MRJob):
             total_data += 1
             total_price += price
 
-        yield None, ('{:.2f}'.format(float(total_price/total_data)), key)
+        yield None, ("{:.2f}".format(float(total_price / total_data)), key)
 
     def reducer_sort_average(self, _, values):
         for average, key in sorted(values, key=lambda x: (float(x[0]), x[1])):
-            with open('output_sales_mapred.csv', 'a') as f:
-                f.write(f'{key}, {average}\n')
+            with open("output_sales_mapred.csv", "a") as f:
+                f.write(f"{key}, {average}\n")
 
             yield key, average
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     SalesAverage.run()
