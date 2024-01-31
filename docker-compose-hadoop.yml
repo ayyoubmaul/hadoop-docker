@@ -14,8 +14,8 @@ services:
     env_file:
       - ./hadoop.env
     ports:
-      - "9870:9870"
-      - "8020:8020"
+      - 9870:9870
+      - 8020:8020
     networks:
       - hadoop_network
 
@@ -31,7 +31,7 @@ services:
     env_file:
       - ./hadoop.env
     ports:
-      - "8089:8088"
+      - 8089:8088
     networks:
       - hadoop_network
 
@@ -47,7 +47,7 @@ services:
     env_file:
       - ./hadoop.env
     ports:
-      - "8188:8188"
+      - 8188:8188
     networks:
       - hadoop_network
 
@@ -61,7 +61,7 @@ services:
     env_file:
       - ./hadoop.env
     ports:
-      - "8042:8042"
+      - 8042:8042
     networks:
       - hadoop_network
 
@@ -88,25 +88,25 @@ services:
       - ./hadoop.env
     networks:
       - hadoop_network
-
-  datanode3:
-    build: ./datanode
-    container_name: datanode3
-    depends_on:
-      - namenode
-    volumes:
-      - hadoop_datanode3:/hadoop/dfs/data
-    env_file:
-      - ./hadoop.env
-    networks:
-      - hadoop_network
+  # datanode3:
+  #   build: ./datanode
+  #   container_name: datanode3
+  #   depends_on:
+  #     - namenode
+  #   volumes:
+  #     - hadoop_datanode3:/hadoop/dfs/data
+  #   env_file:
+  #     - ./hadoop.env
+  #   networks:
+  #     - hadoop_network
 
 volumes:
   hadoop_namenode:
   hadoop_datanode1:
-  hadoop_datanode2:
-  hadoop_datanode3:
+  hadoop_datanode2: # hadoop_datanode3:
+
   hadoop_historyserver:
+
 
 networks:
   hadoop_network:
