@@ -12,7 +12,7 @@ ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-arm64/
 # --------------------------------------------------------
 # HADOOP
 # --------------------------------------------------------
-ENV HADOOP_VERSION=3.3.1
+ENV HADOOP_VERSION=3.3.6
 ENV HADOOP_URL=https://downloads.apache.org/hadoop/common/hadoop-$HADOOP_VERSION/hadoop-$HADOOP_VERSION.tar.gz
 ENV HADOOP_PREFIX=/opt/hadoop-$HADOOP_VERSION
 ENV HADOOP_CONF_DIR=/etc/hadoop
@@ -91,8 +91,8 @@ RUN mkdir /hadoop-data
 # SPARK
 # --------------------------------------------------------
 
-ENV SPARK_VERSION spark-3.3.1-bin-hadoop3
-ENV SPARK_URL https://downloads.apache.org/spark/spark-3.3.1/spark-3.3.1-bin-hadoop3.tgz
+ENV SPARK_VERSION spark-3.5.0
+ENV SPARK_URL https://downloads.apache.org/spark/${SPARK_VERSION}/${SPARK_VERSION}-bin-hadoop3.tgz
 ENV SPARK_HOME=/opt/$SPARK_VERSION
 ENV PATH $SPARK_HOME/bin:$PATH
 # ENV HADOOP_CONF_DIR=$SPARK_HOME/conf
@@ -102,7 +102,8 @@ ENV PYTHONHASHSEED=1
 RUN set -x \
     && curl -fSL "${SPARK_URL}" -o /tmp/spark.tar.gz \
     && tar -xvzf /tmp/spark.tar.gz -C /opt/ \
-    && rm /tmp/spark.tar.gz*
+    && rm /tmp/spark.tar.gz* \
+    && mv /opt/${SPARK_VERSION}-bin-hadoop3 /opt/${SPARK_VERSION}
 
 ADD conf/hive-site.xml $SPARK_HOME/conf
 ADD conf/core-site.xml $SPARK_HOME/conf
@@ -113,41 +114,41 @@ ADD conf/yarn-site.xml $SPARK_HOME/conf
 # --------------------------------------------------------
 
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends \
-         gcc \
-         g++ \
-         subversion \
-         python3-dev \
-         gfortran \
-         build-essential \
-         libopenblas-dev \
-         liblapack-dev \
-         libqpdf-dev \
-         pkg-config \
-         libzbar-dev \
-         libpython3.9-dev \
-         qpdf \
-         xvfb \
-         gconf-service \
-         libasound2 \
-         libatk1.0-0 \
-         libcairo2 \
-         libcups2 \
-         libfontconfig1 \
-         libgdk-pixbuf2.0-0 \
-         libgtk-3-0 \
-         libnspr4 \
-         libpango-1.0-0 \
-         libxss1 \
-         fonts-liberation \
-         libappindicator1 \
-         libnss3 \
-         lsb-release \
-         xdg-utils \
-         wget \
-  && apt-get autoremove -yqq --purge \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+    && apt-get install -y --no-install-recommends \
+    gcc \
+    g++ \
+    subversion \
+    python3-dev \
+    gfortran \
+    build-essential \
+    libopenblas-dev \
+    liblapack-dev \
+    libqpdf-dev \
+    pkg-config \
+    libzbar-dev \
+    libpython3.9-dev \
+    qpdf \
+    xvfb \
+    gconf-service \
+    libasound2 \
+    libatk1.0-0 \
+    libcairo2 \
+    libcups2 \
+    libfontconfig1 \
+    libgdk-pixbuf2.0-0 \
+    libgtk-3-0 \
+    libnspr4 \
+    libpango-1.0-0 \
+    libxss1 \
+    fonts-liberation \
+    libappindicator1 \
+    libnss3 \
+    lsb-release \
+    xdg-utils \
+    wget \
+    && apt-get autoremove -yqq --purge \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 USER airflow
 RUN pip install --default-timeout=100 --upgrade pip

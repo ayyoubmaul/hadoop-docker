@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "hadoop-docker"
+version = "0.1.0"
+description = ""
+authors = ["Yangwook Jeong <yangwookee@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+wheel = "^0.42.0"
+setuptools = "^69.0.3"
+pathlib = "^1.0.1"
+mrjob = "0.7.4"
+pyyaml = "^6.0.1"
+py4j = "^0.10.9.7"
+numpy = "^1.26.3"
+pandas = "^2.2.0"
+pyspark = "^3.5.0"
+apache-airflow-providers-apache-spark = "^4.7.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

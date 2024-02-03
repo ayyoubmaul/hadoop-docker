@@ -1,7 +1,6 @@
 version: "2.1"
-x-airflow-common:
-  &airflow-common
-  image: ${AIRFLOW_IMAGE_NAME:-airflow-hadoop-base:3.3.1}
+x-airflow-common: &airflow-common
+  image: ${AIRFLOW_IMAGE_NAME:-airflow-hadoop-base:3.3.6}
   environment:
     - AIRFLOW_HOME=/home/airflow
     - AIRFLOW__CORE_dags_folder=/home/airflow/dags
@@ -33,28 +32,21 @@ services:
       - POSTGRES_DB=airflow
       - POSTGRES_PORT=5432
     ports:
-      - "5432:5432"
+      - 5432:5432
     networks:
       - hadoop_network
 
   airflow-init:
-    << : *airflow-common
+    <<: *airflow-common
     container_name: airflow_init
     entrypoint: /bin/bash
     command:
       - -c
-      - airflow users list || ( airflow db init && airflow db upgrade &&
-        airflow users create
-          --role Admin
-          --username airflow
-          --password airflow
-          --email airflow@airflow.com
-          --firstname airflow
-          --lastname airflow )
+      - airflow users list || ( airflow db init && airflow db upgrade && airflow users create --role Admin --username airflow --password airflow --email airflow@airflow.com --firstname airflow --lastname airflow )
     restart: on-failure
 
   airflow-webserver:
-    << : *airflow-common
+    <<: *airflow-common
     command: airflow webserver
     ports:
       - 8080:8080
@@ -62,7 +54,7 @@ services:
     restart: always
 
   airflow-scheduler:
-    << : *airflow-common
+    <<: *airflow-common
     command: airflow scheduler
     container_name: airflow_scheduler
     restart: always

@@ -1,4 +1,4 @@
-FROM hadoop-base:3.3.1
+FROM hadoop-base:3.3.6
 
 # Never prompt the user for choices on installation/configuration of packages
 ENV DEBIAN_FRONTEND noninteractive
@@ -23,32 +23,32 @@ ENV GUNICORN_CMD_ARGS --log-level WARNING
 
 RUN set -ex \
     && buildDeps=' \
-        build-essential \
-        libblas-dev \
-        libatlas-base-dev \
-        freetds-dev \
-        libkrb5-dev \
-        libsasl2-dev \
-        libssl-dev \
-        libffi-dev \
-        libpq-dev \
-        git \
+    build-essential \
+    libblas-dev \
+    libatlas-base-dev \
+    freetds-dev \
+    libkrb5-dev \
+    libsasl2-dev \
+    libssl-dev \
+    libffi-dev \
+    libpq-dev \
+    git \
     ' \
     && add-apt-repository --remove ppa:deadsnakes/ppa \
     && apt-get update -yqq \
     && apt-get upgrade -yqq \
     && apt-get install -yqq --no-install-recommends \
-        $buildDeps \
-        freetds-bin \
-        build-essential \
-        default-libmysqlclient-dev \
-        apt-utils \
-        curl \
-        rsync \
-        netcat-traditional \
-        locales \
-        gcc \
-        libpq5 \
+    $buildDeps \
+    freetds-bin \
+    build-essential \
+    default-libmysqlclient-dev \
+    apt-utils \
+    curl \
+    rsync \
+    netcat-traditional \
+    locales \
+    gcc \
+    libpq5 \
     && sed -i 's/^# en_US.UTF-8 UTF-8$/en_US.UTF-8 UTF-8/g' /etc/locale.gen \
     && locale-gen \
     && update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 \
@@ -67,12 +67,12 @@ RUN set -ex \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf \
-        /var/lib/apt/lists/* \
-        /tmp/* \
-        /var/tmp/* \
-        /usr/share/man \
-        /usr/share/doc \
-        /usr/share/doc-base
+    /var/lib/apt/lists/* \
+    /tmp/* \
+    /var/tmp/* \
+    /usr/share/man \
+    /usr/share/doc \
+    /usr/share/doc-base
 
 ADD entrypoint.sh /entrypoint.sh
 

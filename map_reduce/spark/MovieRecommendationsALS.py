@@ -1,3 +1,4 @@
+from typing import cast, Any
 from pyspark.sql import SparkSession
 from pyspark.ml.recommendation import ALS
 from pyspark.sql import Row
@@ -9,7 +10,7 @@ def loadMovieNames():
     with open("ml-100k/u.item") as f:
         for line in f:
             fields = line.split('|')
-            movieNames[int(fields[0])] = fields[1].decode('ascii', 'ignore')
+            movieNames[int(fields[0])] = cast(Any, fields[1]).decode('ascii', 'ignore')
     return movieNames
 
 # Convert u.data lines into (userID, movieID, rating) rows

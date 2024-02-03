@@ -1,4 +1,4 @@
 #!/bin/bash
 
-docker build -t spark-base:3.3.1 .
+docker build -t spark-base:3.5.0 .
 docker-compose up -d
