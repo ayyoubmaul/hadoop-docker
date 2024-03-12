@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   spark-master:
-    image: spark-base:3.5.0
+    image: localhost/spark-base:3.5.1
     ports:
       - 9090:8081
       - 7077:7077
@@ -17,7 +17,7 @@ services:
     command: /bin/sh -c "./start-spark.sh"
 
   spark-worker-a:
-    image: spark-base:3.5.0
+    image: localhost/spark-base:3.5.1
     ports:
       - 9091:8081
       - 7000:7000
@@ -39,7 +39,7 @@ services:
     command: /bin/sh -c "./start-spark.sh"
 
   spark-worker-b:
-    image: spark-base:3.5.0
+    image: localhost/spark-base:3.5.1
     ports:
       - 9092:8081
       - 7001:7000

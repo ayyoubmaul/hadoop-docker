@@ -1,6 +1,6 @@
 # build from hadoop-base:3.2.1
-# that we built before using docker build -t hadoop-base:3.3.6 .
-FROM hadoop-base:3.3.6
+# that we built before using docker build -t localhost/hadoop-base:3.3.6 .
+FROM localhost/hadoop-base:3.3.6
 
 HEALTHCHECK CMD curl -f http://localhost:9864/ || exit 1
 

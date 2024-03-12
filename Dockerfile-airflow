@@ -1,4 +1,4 @@
-FROM  apache/airflow:2.3.2
+FROM  docker.io/apache/airflow:2.8.3
 
 USER root
 
@@ -91,7 +91,7 @@ RUN mkdir /hadoop-data
 # SPARK
 # --------------------------------------------------------
 
-ENV SPARK_VERSION spark-3.5.0
+ENV SPARK_VERSION spark-3.5.1
 ENV SPARK_URL https://downloads.apache.org/spark/${SPARK_VERSION}/${SPARK_VERSION}-bin-hadoop3.tgz
 ENV SPARK_HOME=/opt/$SPARK_VERSION
 ENV PATH $SPARK_HOME/bin:$PATH

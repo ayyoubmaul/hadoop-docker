@@ -2,13 +2,14 @@ version: "2.1"
 
 services:
   namenode:
+    image: localhost/namenode
     build: ./namenode
     container_name: namenode
     volumes:
-      - hadoop_namenode:/hadoop/dfs/name
-      - ./data/:/hadoop-data/input
-      - ./map_reduce/:/hadoop-data/map_reduce
-      - ./requirements.txt:/hadoop-data/requirements.txt
+      - hadoop_namenode:/hadoop/dfs/name:z
+      - ./data/:/hadoop-data/input:z
+      - ./map_reduce/:/hadoop-data/map_reduce:z
+      - ./requirements.txt:/hadoop-data/requirements.txt:z
     environment:
       - CLUSTER_NAME=test
     env_file:
@@ -20,6 +21,7 @@ services:
       - hadoop_network
 
   resourcemanager:
+    image: localhost/resourcemanager
     build: ./resourcemanager
     container_name: resourcemanager
     restart: on-failure
@@ -27,7 +29,7 @@ services:
       - namenode
       - datanode1
       - datanode2
-      - datanode3
+      # - datanode3
     env_file:
       - ./hadoop.env
     ports:
@@ -36,6 +38,7 @@ services:
       - hadoop_network
 
   historyserver:
+    image: localhost/historyserver
     build: ./historyserver
     container_name: historyserver
     depends_on:
@@ -43,7 +46,7 @@ services:
       - datanode1
       - datanode2
     volumes:
-      - hadoop_historyserver:/hadoop/yarn/timeline
+      - hadoop_historyserver:/hadoop/yarn/timeline:z
     env_file:
       - ./hadoop.env
     ports:
@@ -52,6 +55,7 @@ services:
       - hadoop_network
 
   nodemanager1:
+    image: localhost/nodemanager
     build: ./nodemanager
     container_name: nodemanager1
     depends_on:
@@ -66,35 +70,38 @@ services:
       - hadoop_network
 
   datanode1:
+    image: localhost/datanode
     build: ./datanode
     container_name: datanode1
     depends_on:
       - namenode
     volumes:
-      - hadoop_datanode1:/hadoop/dfs/data
+      - hadoop_datanode1:/hadoop/dfs/data:z
     env_file:
       - ./hadoop.env
     networks:
       - hadoop_network
 
   datanode2:
+    image: localhost/datanode
     build: ./datanode
     container_name: datanode2
     depends_on:
       - namenode
     volumes:
-      - hadoop_datanode2:/hadoop/dfs/data
+      - hadoop_datanode2:/hadoop/dfs/data:z
     env_file:
       - ./hadoop.env
     networks:
       - hadoop_network
   # datanode3:
+  #   image: localhost/datanode
   #   build: ./datanode
   #   container_name: datanode3
   #   depends_on:
   #     - namenode
   #   volumes:
-  #     - hadoop_datanode3:/hadoop/dfs/data
+  #     - hadoop_datanode3:/hadoop/dfs/data:z
   #   env_file:
   #     - ./hadoop.env
   #   networks:
@@ -103,8 +110,8 @@ services:
 volumes:
   hadoop_namenode:
   hadoop_datanode1:
-  hadoop_datanode2: # hadoop_datanode3:
-
+  hadoop_datanode2: 
+  # hadoop_datanode3:
   hadoop_historyserver:
 
 

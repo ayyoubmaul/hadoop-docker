@@ -1,6 +1,6 @@
-FROM openjdk:11-jdk AS jdk
+FROM docker.io/openjdk:11-jdk AS jdk
 
-FROM python:3.11
+FROM docker.io/python:3.11
 
 USER root
 
@@ -60,7 +60,7 @@ COPY conf/yarn-site.xml $HADOOP_CONF_DIR/yarn-site.xml
 # SPARK
 # --------------------------------------------------------
 
-ENV SPARK_VERSION spark-3.5.0
+ENV SPARK_VERSION spark-3.5.1
 ENV SPARK_URL https://downloads.apache.org/spark/${SPARK_VERSION}/${SPARK_VERSION}-bin-hadoop3.tgz
 ENV SPARK_HOME=/opt/$SPARK_VERSION
 ENV PATH $SPARK_HOME/bin:$PATH

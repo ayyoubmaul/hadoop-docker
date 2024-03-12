@@ -13,8 +13,10 @@ This is just for learning intention, not recomended for production. Use Hortonwo
 ## Kick-off Cluster
 
 1. Clone this repos to your project directory, and `cd hadoop-docker`
-2. If you are in Linux/MAC Just simply run `./run_cluster.sh`
-3. If you are in Windows try run this command `docker build -t hadoop-base:3.3.6 . && docker-compose up`
+2. `cp cluster-template.env cluster.env`
+3. Edit `cluster.env` (choose docker or podman)
+4. If you are in Linux/MAC Just simply run `./run_cluster.sh`
+5. If you are in Windows try run this command `docker build -t localhost/hadoop-base:3.3.6 . && docker-compose up`
 
 ## How to run MapReduce Job
 
@@ -44,6 +46,14 @@ hadoop jar /opt/hadoop-3.3.6/share/hadoop/tools/lib/hadoop-streaming-3.3.6.jar -
 ## End to end step by step to kick-off Airflow, Spark Cluster and Hadoop Cluster
 
 Please start everything from `run_cluster.sh` because the base image created from this step
+
+## Known problems
+
+* Not for production use, as authentication and security are missing.
+* OCI container images do not support `HEALTHCHECK`. Hence podman ignores this.
+* WARNING: HADOOP_PREFIX has been replaced by HADOOP_HOME. Using value of HADOOP_PREFIX.
+* `db init` is deprecated.  Use `db migrate` instead to migrate the db and/or 
+  airflow connections create-default-connections to create the default connections.
 
 ## To Do
 
