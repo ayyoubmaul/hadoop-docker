@@ -1,11 +1,11 @@
-FROM hadoop-base:3.3.6
+FROM localhost/hadoop-base:3.3.6
 
 # Never prompt the user for choices on installation/configuration of packages
 ENV DEBIAN_FRONTEND noninteractive
 ENV TERM linux
 
 # Airflow
-ARG AIRFLOW_VERSION=2.3.2
+ARG AIRFLOW_VERSION=2.8.3
 ARG AIRFLOW_USER_HOME=/home/airflow
 ARG AIRFLOW_DEPS=""
 ARG PYTHON_DEPS=""
@@ -61,7 +61,7 @@ RUN set -ex \
     && pip install cython \
     && pip install apache-airflow[crypto,celery,postgres,jdbc,mysql]==${AIRFLOW_VERSION} \
     && pip install 'redis==3.2' \
-    && pip install SQLAlchemy Flask-SQLAlchemy==2.4.4 \
+    && pip install SQLAlchemy Flask-SQLAlchemy \
     && if [ -n "${PYTHON_DEPS}" ]; then pip install ${PYTHON_DEPS}; fi \
     && apt-get purge --auto-remove -yqq $buildDeps \
     && apt-get autoremove -yqq --purge \

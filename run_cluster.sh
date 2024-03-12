@@ -1,19 +1,24 @@
 #!/bin/bash
 
+source cluster.env
+
+# containers write into logs and output
+chmod -R a+w logs output
+
 # create new network
-docker network create hadoop_network
+$DOCKER network create hadoop_network
 
 # build docker image with image name hadoop-base:3.3.6
-docker build -t hadoop-base:3.3.6 -f Dockerfile-hadoop .
+$DOCKER build -t localhost/hadoop-base:3.3.6 -f Dockerfile-hadoop .
 # running image to container, -d to run it in daemon mode
-docker-compose -f docker-compose-hadoop.yml up -d
+$DOCKER_COMPOSE -f docker-compose-hadoop.yml up -d
 
 # Run Airflow Cluster
 if [[ "$PWD" != "airflow" ]]; then
   cd airflow && ./run_airflow.sh && cd ..
 fi
 
-docker-compose -f docker-compose-airflow.yml up -d
+$DOCKER_COMPOSE -f docker-compose-airflow.yml up -d
 
 # Run Spark Cluster
 if [[ "$PWD" != "spark" ]]; then

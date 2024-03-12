@@ -1,3 +1,5 @@
 #!/bin/bash
 
-docker build -t airflow-hadoop-base:3.3.6 .
+source ../cluster.env
+
+$DOCKER build -t localhost/airflow-hadoop-base:3.3.6 .

@@ -108,9 +108,16 @@ if [ "$AIRFLOW__CORE__EXECUTOR" = "CeleryExecutor" ]; then
   wait_for_port "Redis" "$REDIS_HOST" "$REDIS_PORT"
 fi
 
+TEST=`airflow users list`
+if [ "$TEST" = "No data found" ]; then
+  airflow db init \
+  && airflow db upgrade \
+  && airflow users create --role Admin --username airflow --password airflow \
+    --email airflow@airflow.com --firstname airflow --lastname airflow;
+fi
+
 case "$1" in
   webserver)
-    airflow initdb
     if [ "$AIRFLOW__CORE__EXECUTOR" = "LocalExecutor" ] || [ "$AIRFLOW__CORE__EXECUTOR" = "SequentialExecutor" ]; then
       # With the "Local" and "Sequential" executors it should all run in one container.
       airflow scheduler &

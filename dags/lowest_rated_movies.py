@@ -1,5 +1,6 @@
 from airflow import DAG
 from airflow.operators.dummy import DummyOperator
+from airflow.operators.bash import BashOperator
 from airflow.contrib.operators.spark_submit_operator import SparkSubmitOperator
 from datetime import datetime, timedelta
 
@@ -16,8 +17,9 @@ default_args = {
 
 with DAG('lowest_rated_movies', default_args=default_args, schedule_interval=None, catchup=False) as dag:
 
-    start = DummyOperator(
+    start = BashOperator(
         task_id='start',
+        bash_command='hadoop fs -mkdir -p hdfs://namenode:8020/user/root/input; hadoop fs -mkdir -p hdfs://namenode:8020/user/root/output; hadoop fs -copyFromLocal /hadoop-data/input/* hdfs://namenode:8020/user/root/input/; exit 0'
     )
 
     spark_submit = SparkSubmitOperator(

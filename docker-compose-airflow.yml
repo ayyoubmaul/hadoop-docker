@@ -1,6 +1,6 @@
 version: "2.1"
 x-airflow-common: &airflow-common
-  image: ${AIRFLOW_IMAGE_NAME:-airflow-hadoop-base:3.3.6}
+  image: ${AIRFLOW_IMAGE_NAME:-localhost/airflow-hadoop-base:3.3.6}
   environment:
     - AIRFLOW_HOME=/home/airflow
     - AIRFLOW__CORE_dags_folder=/home/airflow/dags
@@ -12,12 +12,12 @@ x-airflow-common: &airflow-common
     - AIRFLOW__CORE__LOAD_EXAMPLES=False
     - AIRFLOW__CORE__LOGGING_LEVEL=INFO
   volumes:
-    - ./output:/home/airflow/output
-    - ./dags:/home/airflow/dags
-    - ./plugins:/home/airflow/plugins
-    - ./logs:/home/airflow/logs
-    - ./data/:/hadoop-data/input
-    - ./map_reduce/:/hadoop-data/map_reduce
+    - ./output:/home/airflow/output:z
+    - ./dags:/home/airflow/dags:z
+    - ./plugins:/home/airflow/plugins:z
+    - ./logs:/home/airflow/logs:z
+    - ./data/:/hadoop-data/input:z
+    - ./map_reduce/:/hadoop-data/map_reduce:z
   depends_on:
     - postgres
   networks:
@@ -25,7 +25,7 @@ x-airflow-common: &airflow-common
 
 services:
   postgres:
-    image: postgres:13
+    image: docker.io/postgres:13
     environment:
       - POSTGRES_USER=airflow
       - POSTGRES_PASSWORD=airflow
@@ -36,14 +36,14 @@ services:
     networks:
       - hadoop_network
 
-  airflow-init:
-    <<: *airflow-common
-    container_name: airflow_init
-    entrypoint: /bin/bash
-    command:
-      - -c
-      - airflow users list || ( airflow db init && airflow db upgrade && airflow users create --role Admin --username airflow --password airflow --email airflow@airflow.com --firstname airflow --lastname airflow )
-    restart: on-failure
+  # airflow-init:
+  #   <<: *airflow-common
+  #   container_name: airflow_init
+  #   entrypoint: /bin/bash
+  #   command:
+  #     - -c
+  #     - airflow users list || ( airflow db init && airflow db upgrade && airflow users create --role Admin --username airflow --password airflow --email airflow@airflow.com --firstname airflow --lastname airflow )
+  #   restart: on-failure
 
   airflow-webserver:
     <<: *airflow-common
